@@ -13,8 +13,8 @@ typedef struct s_list
 	char			specificator;
 }					t_list;
 
-int	ft_printf(const char *, ...);;
-int	count_arg(const char *string);;
+int	ft_printf(const char *, ...);
+int	count_arg(const char *string);
 void	list_print(t_list	*list, va_list argptr);
 char	parser_flag(const char *string);
 int	parser_width(const char *string, va_list argptr);
@@ -37,5 +37,6 @@ void printf_unsigned(t_list *list, va_list argptr);
 static int	ft_len_int_10(int n);
 static int	ft_len_unsigned_10(unsigned number);
 int max(int a, int b);
+void ft_putnbr_unsigned_fd(unsigned int a, int fd);
 
 #endif

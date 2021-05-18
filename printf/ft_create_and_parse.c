@@ -32,6 +32,7 @@ int	parser_width(const char *string, va_list argptr)
 		}
 		string++;
 	}
+	return (-1);
 }
 
 int	parser_precision(const char *string, va_list argptr)
@@ -56,7 +57,9 @@ int	parser_precision(const char *string, va_list argptr)
 			precision = ft_atoi((char *)string);
 			return (precision);
 		}
+		return (0);
 	}
+	return (-1); //значит флаг отсутствует
 }
 
 char	parser_specificator(const char *string)
