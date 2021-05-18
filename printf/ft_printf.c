@@ -58,7 +58,7 @@ int	ft_printf(const char *string, ...)
 
 	specificators = "cspdiuxX%";
 	string = (char *)string;
-	va_start(argptr, count_arg(string));
+	va_start(argptr, string);
 	while (*string != '\0')
 	{
 		if (*string == '%')
