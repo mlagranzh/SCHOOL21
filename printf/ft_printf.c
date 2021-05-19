@@ -50,22 +50,38 @@ void	list_print(t_list	*list, va_list argptr)
 		ft_putchar_fd('%', 1);
 }
 
+t_list	*ft_zero_list()
+{
+	t_list *list;
+
+	list = (t_list *)malloc(sizeof(t_list));
+	list->flags = (char) NULL;
+	list->width = (int) NULL;
+	list->precision = (int) NULL;
+	list->specificator = (char) NULL;
+	list -> length = 0;
+	return (list);
+}
+
 int	ft_printf(const char *string, ...)
 {
 	va_list	argptr;
 	char	*specificators;
 	t_list	*list;
+	int output;
 
+	output = 0;
 	specificators = "cspdiuxX%";
 	string = (char *)string;
 	va_start(argptr, string);
+	list = ft_zero_list();
 	while (*string != '\0')
 	{
 		if (*string == '%')
 		{
 			list = ft_create_list(string, argptr);
-			list->length = 0;
 			list_print(list, argptr);
+			output += list->length;
 			string++;
 			while (!ft_char_in_string(specificators, *string))
 				string++;
@@ -73,10 +89,10 @@ int	ft_printf(const char *string, ...)
 		else
 		{
 			ft_putchar_fd(*string, 1);
-		//	list->length += 1;
+			output += 1;
 		}
 		string++;
 	}
 	va_end(argptr);
-	return (list->length);
+	return (output);
 }

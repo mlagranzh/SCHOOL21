@@ -12,7 +12,10 @@ typedef struct s_list
 	int				precision;
 	char			specificator;
 	int				length;
+	char			*parameters;
 }					t_list;
+
+char *parser_parameters(char *string);
 
 int	ft_printf(const char *, ...);
 int	count_arg(const char *string);
