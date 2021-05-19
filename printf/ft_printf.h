@@ -11,6 +11,7 @@ typedef struct s_list
 	int				width;
 	int				precision;
 	char			specificator;
+	int				length;
 }					t_list;
 
 int	ft_printf(const char *, ...);

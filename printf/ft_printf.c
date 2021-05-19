@@ -64,15 +64,19 @@ int	ft_printf(const char *string, ...)
 		if (*string == '%')
 		{
 			list = ft_create_list(string, argptr);
+			list->length = 0;
 			list_print(list, argptr);
 			string++;
 			while (!ft_char_in_string(specificators, *string))
 				string++;
 		}
 		else
+		{
 			ft_putchar_fd(*string, 1);
+		//	list->length += 1;
+		}
 		string++;
 	}
 	va_end(argptr);
-	return (0);
+	return (list->length);
 }

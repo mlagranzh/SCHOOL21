@@ -27,10 +27,17 @@ void printf_pointer(t_list *list, va_list argptr)
     if (list->precision > 0 && list->precision < list->width)
       count_space = list->width - list->precision;
     while (count_space-- > 0)
+    {
       ft_putchar_fd(' ', 1);
+      list->length += 1;
+    }
     while (count_zero-- > 0)
+    {
       ft_putchar_fd('0', 1);
+      list->length += 1;
+    }
     ft_putstr_fd(ft_strjoin("0x",to_write), 1);
+    list->length += ft_strlen(ft_strjoin("0x",to_write));
   }
   else if (list->flags == '-')
   {
@@ -73,10 +80,17 @@ void printf_hexadecimal_X(t_list *list, va_list argptr)
     if (list->precision > 0 && list->precision < list->width)
       count_space = list->width - list->precision;
     while (count_space-- > 0)
+    {
       ft_putchar_fd(' ', 1);
+      list->length += 1;
+    }
     while (count_zero-- > 0)
+    {
       ft_putchar_fd('0', 1);
+      list->length += 1;
+    }
     ft_putstr_fd(to_write, 1);
+    list->length += ft_strlen(to_write);
   }
   else if (list->flags == '-')
   {
@@ -85,10 +99,17 @@ void printf_hexadecimal_X(t_list *list, va_list argptr)
     if (list->precision > 0 && list->precision < list->width)
       count_space = list->width - list->precision;
     while (count_zero-- > 0)
+    {
       ft_putchar_fd('0', 1);
+      list->length += 1;
+    }
     ft_putstr_fd(to_write, 1);
+    list->length += ft_strlen(to_write);
     while (count_space-- > 0)
+    {
       ft_putchar_fd(' ', 1);
+      list->length += 1;
+    }
   }
   else
   {
@@ -97,10 +118,17 @@ void printf_hexadecimal_X(t_list *list, va_list argptr)
     if (list->precision > 0 && list->precision < list->width)
       count_space = list->width - list->precision;
     while (count_space-- > 0)
+    {
+      list->length += 1;
       ft_putchar_fd(' ', 1);
+    }
     while (count_zero-- > 0)
+    {
       ft_putchar_fd('0', 1);
+      list->length += 1;
+    }
     ft_putstr_fd(to_write, 1);
+    list->length += ft_strlen(to_write);
   }
 }
 
@@ -119,10 +147,18 @@ void printf_hexadecimal_x(t_list *list, va_list argptr)
     if (list->precision > 0 && list->precision < list->width)
       count_space = list->width - list->precision;
     while (count_space-- > 0)
+    {
       ft_putchar_fd(' ', 1);
+      list->length += 1;
+    }
     while (count_zero-- > 0)
+    {
       ft_putchar_fd('0', 1);
+      list->length += 1;
+    }
     ft_putstr_fd(to_write, 1);
+    list->length += ft_strlen(to_write);
+
   }
   else if (list->flags == '-')
   {
@@ -131,10 +167,17 @@ void printf_hexadecimal_x(t_list *list, va_list argptr)
     if (list->precision > 0 && list->precision < list->width)
       count_space = list->width - list->precision;
     while (count_zero-- > 0)
+    {
       ft_putchar_fd('0', 1);
+      list->length += 1;
+    }
     ft_putstr_fd(to_write, 1);
+    list->length += ft_strlen(to_write);
     while (count_space-- > 0)
+    {
       ft_putchar_fd(' ', 1);
+      list->length += 1;
+    }
   }
   else
   {
@@ -143,10 +186,17 @@ void printf_hexadecimal_x(t_list *list, va_list argptr)
     if (list->precision > 0 && list->precision < list->width)
       count_space = list->width - list->precision;
     while (count_space-- > 0)
+    {
       ft_putchar_fd(' ', 1);
+      list->length += 1;
+    }
     while (count_zero-- > 0)
+    {
       ft_putchar_fd('0', 1);
+      list->length += 1;
+    }
     ft_putstr_fd(to_write, 1);
+    list->length += ft_strlen(to_write);
   }
 }
 
@@ -241,14 +291,23 @@ void printf_string(t_list	*list, va_list argptr)
   if (list->flags == '-')
   {
     if (list->precision >= 0)
+    {
       ft_putnstr_fd(a, 1, list->precision);
+      list->length += list->precision;
+    }
     else
+    {
       ft_putstr_fd(a, 1);
+      list->length += ft_strlen(a);
+    }
     count_space = list->width - ft_strlen(a);
     if (list->precision == 0)
       count_space--;
     while (count_space-- > 0)
+    {
       ft_putchar_fd(' ', 1);
+      list->length += 1;
+    }
   }
   else
   {
@@ -256,11 +315,21 @@ void printf_string(t_list	*list, va_list argptr)
     if (list->precision == 0)
       count_space = list->width;
     while (count_space-- > 0)
+    {
       ft_putchar_fd(' ', 1);
+      list->length += 1;
+    }
     if (list->precision >= 0)
+    {
       ft_putnstr_fd(a, 1, list->precision);
+      list->length += list->precision;
+
+    }
     else
+    {
       ft_putstr_fd(a, 1);
+      list->length += ft_strlen(a);
+    }
   }
 }
 
@@ -293,17 +362,33 @@ void printf_decimal(t_list *list, va_list argptr)
     if (list->precision > 0 && list->precision < list->width)
       count_space = list->width - list->precision;
     if (a < 0)
+    {
       ft_putchar_fd('-', 1);
+      list->length += 1;
+    }
     while (count_zero-- > 0)
+    {
       ft_putchar_fd('0', 1);
+      list->length += 1;
+
+    }
     if (a != 0 || list->precision != 0)
+    {
       ft_put_int_nbr_fd(a, 1);
+      list->length += ft_len_int_10(a);
+    }
     else if (list->width > 0)
+    {
       ft_putchar_fd(' ', 1);
+      list->length += 1;
+    }
     if (a < 0)
       count_space--;
     while (count_space-- > 0)
+    {
       ft_putchar_fd(' ', 1);
+      list->length += 1;
+    }
   }
   else if (list->flags == '0')
   {
@@ -317,15 +402,31 @@ void printf_decimal(t_list *list, va_list argptr)
     if (a < 0)
       count_space -= 1;
     while (count_space-- > 0)
+    {
+      list->length += 1;
       ft_putchar_fd(' ', 1);
+    }
     if (a < 0)
+    {
       ft_putchar_fd('-', 1);
+            list->length += 1;
+    }
     while (count_zero-- > 0)
+    {
       ft_putchar_fd('0', 1);
+            list->length += 1;
+
+    }
     if (a != 0 || list->precision != 0)
+    {
       ft_put_int_nbr_fd(a, 1);
+            list->length += ft_len_int_10(a);
+    }
     else if (list->width > 0)
+    {
       ft_putchar_fd(' ', 1);
+            list->length += 1;
+    }
   }
   else
   {
@@ -336,15 +437,30 @@ void printf_decimal(t_list *list, va_list argptr)
     if (a < 0)
       count_space -= 1;
     while (count_space-- > 0)
+    {
       ft_putchar_fd(' ', 1);
+      list->length += 1;
+    }
     if (a < 0)
+    {
       ft_putchar_fd('-', 1);
+      list->length += 1;
+    }
     while (count_zero-- > 0)
+    {
       ft_putchar_fd('0', 1);
+      list->length += 1;
+    }
     if (a != 0 || list->precision != 0)
+    {
       ft_put_int_nbr_fd(a, 1);
+      list->length += ft_len_int_10(a);
+    }
     else if (list->width > 0)
+    {
       ft_putchar_fd(' ', 1);
+      list->length += 1;
+    }
   }
 }
 
@@ -358,11 +474,15 @@ void printf_char(t_list *list, va_list argptr)
   if (list->flags == '-')
   {
     ft_putchar_fd(a, 1);
+ //   list->length += 1;
     count_space = list->width - 1;
     if (list->precision == 0)
       count_space--;
     while (count_space-- > 0)
+    {
       ft_putchar_fd(' ', 1);
+    //  list->length += 1;
+    }
   }
   else
   {
@@ -370,8 +490,12 @@ void printf_char(t_list *list, va_list argptr)
     if (list->precision == 0)
       count_space = list->width;
     while (count_space-- > 0)
+    {
       ft_putchar_fd(' ', 1);
+  //    list->length += 1;
+    }
     ft_putchar_fd(a, 1);
+   // list->length += 1;
   }
 }
 
@@ -410,10 +534,17 @@ void printf_unsigned(t_list *list, va_list argptr)
     if (list->precision > 0 && list->precision < list->width)
       count_zero = list->precision - ft_len_unsigned_10(a);
     while (count_space-- > 0)
+    {
       ft_putchar_fd(' ', 1);
+            list->length += 1;
+    }
     while (count_zero-- > 0)
+    {
       ft_putchar_fd('0', 1);
+            list->length += 1;
+    }
     ft_putnbr_unsigned_fd(a, 1);
+          list->length += ft_len_unsigned_10(a);
   }
   else if (list->flags == '-')
   {
@@ -422,10 +553,17 @@ void printf_unsigned(t_list *list, va_list argptr)
     if (list->precision > 0 && list->precision < list->width)
       count_space = list->width - max(ft_len_unsigned_10(a), list->precision);
     while (count_zero-- > 0)
+    {
       ft_putchar_fd('0', 1);
+            list->length += 1;
+    }
     ft_putnbr_unsigned_fd(a, 1);
+    list->length += ft_len_unsigned_10(a);
     while (count_space-- > 0)
+    {
       ft_putchar_fd(' ', 1);
+            list->length += 1;
+    }
   }
   else
   {
@@ -434,10 +572,17 @@ void printf_unsigned(t_list *list, va_list argptr)
     if (list->precision > 0 && list->precision < list->width)
       count_space = list->width - list->precision;
     while (count_space-- > 0)
+    {
       ft_putchar_fd(' ', 1);
+            list->length += 1;
+    }
     while (count_zero-- > 0)
+    {
       ft_putchar_fd('0', 1);
+            list->length += 1;
+    }
     ft_putnbr_unsigned_fd(a, 1);
+    list->length += ft_len_unsigned_10(a);
   }
 }
 
