@@ -10,6 +10,7 @@ char	parser_flag(const char *string)
 		return ('-');
 	if (string[i + 1] == '0')
 		return ('0');
+	return ('/');
 }
 
 int	parser_width(const char *string, va_list argptr)
@@ -38,7 +39,6 @@ int	parser_width(const char *string, va_list argptr)
 int	parser_precision(const char *string, va_list argptr)
 {
 	int		precision;
-	int		i;
 	char	*specificators;
 
 	specificators = "cspdiuxX";

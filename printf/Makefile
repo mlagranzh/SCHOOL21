@@ -2,7 +2,7 @@ NAME		= libftprintf.a
 SRCS	= ft_create_and_parse.c ft_printf_specificator.c ft_printf.c
 
 OBJS	= $(SRCS:.c=.o)
-GCC	= gcc
+GCC	= gcc -Wall -Wextra -Werror
 .c.o :
 	${GCC} -c $< -o ${<:.c=.o}
 $(NAME): ${OBJS}

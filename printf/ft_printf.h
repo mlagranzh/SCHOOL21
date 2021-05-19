@@ -29,13 +29,13 @@ char	*ft_itoa_16_X(unsigned int n);
 char	*ft_itoa_16_x(unsigned int n);
 void ft_putnstr_fd(char *a, int fd, int n);
 void printf_string(t_list	*list, va_list argptr);
-static int	ft_len_int_16(unsigned int n);
+int	ft_len_int_16(unsigned int n);
 void printf_decimal(t_list *list, va_list argptr);
 void printf_char(t_list *list, va_list argptr);
 void	ft_put_int_nbr_fd(int n, int fd);
 void printf_unsigned(t_list *list, va_list argptr);
-static int	ft_len_int_10(int n);
-static int	ft_len_unsigned_10(unsigned number);
+int	ft_len_int_10(int n);
+int	ft_len_unsigned_10(unsigned number);
 int max(int a, int b);
 void ft_putnbr_unsigned_fd(unsigned int a, int fd);
 

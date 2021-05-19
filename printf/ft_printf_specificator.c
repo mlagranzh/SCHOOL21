@@ -264,7 +264,7 @@ void printf_string(t_list	*list, va_list argptr)
   }
 }
 
-static int	ft_len_int_16(unsigned int n)
+int	ft_len_int_16(unsigned int n)
 {
 	int				count;
 
@@ -286,9 +286,8 @@ void printf_decimal(t_list *list, va_list argptr)
   a = va_arg(argptr, int);
   int count_zero;
   int count_space;
-  if (list->flags == '-' || list->width < 0)
+  if (list->flags == '-')
   {
-    list->width = -list->width;
     count_zero = list->precision - ft_len_int_10(a);
     count_space = list->width - ft_len_int_10(a);
     if (list->precision > 0 && list->precision < list->width)
@@ -354,7 +353,26 @@ void printf_char(t_list *list, va_list argptr)
   char a;
 
   a = (char) va_arg(argptr, int);
-  ft_putchar_fd(a, 1);
+  int count_space;
+  count_space = 0;
+  if (list->flags == '-')
+  {
+    ft_putchar_fd(a, 1);
+    count_space = list->width - 1;
+    if (list->precision == 0)
+      count_space--;
+    while (count_space-- > 0)
+      ft_putchar_fd(' ', 1);
+  }
+  else
+  {
+    count_space = list->width - 1;
+    if (list->precision == 0)
+      count_space = list->width;
+    while (count_space-- > 0)
+      ft_putchar_fd(' ', 1);
+    ft_putchar_fd(a, 1);
+  }
 }
 
 void	ft_put_int_nbr_fd(int n, int fd)
@@ -365,7 +383,7 @@ void	ft_put_int_nbr_fd(int n, int fd)
     number = -n;
   else
     number = n;
-  ft_putnbr_unsigned_fd(number, 1); 
+  ft_putnbr_unsigned_fd(number, fd); 
 }
 
 void ft_putnbr_unsigned_fd(unsigned int a, int fd)
@@ -423,7 +441,7 @@ void printf_unsigned(t_list *list, va_list argptr)
   }
 }
 
-static int	ft_len_int_10(int n)
+int	ft_len_int_10(int n)
 {
 	int				count;
 
@@ -443,7 +461,7 @@ static int	ft_len_int_10(int n)
 	return (count);
 }
 
-static int	ft_len_unsigned_10(unsigned number)
+int	ft_len_unsigned_10(unsigned number)
 {
 	int				count;
 
