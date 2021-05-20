@@ -66,7 +66,8 @@ char	parser_specificator(const char *string)
 {
 	char	*specificators;
 
-	specificators = "cspdiuxX";
+	specificators = "cspdiuxX%";
+	string++;
 	while (!ft_char_in_string(specificators, *string))
 		string++;
 	return (*string);

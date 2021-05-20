@@ -16,7 +16,10 @@ typedef struct s_list
 }					t_list;
 
 char *parser_parameters(char *string);
+  int ft_sign_minus(int a);
 
+  int min(int a, int b);
+int printable(t_list *list, unsigned int a);
 int	ft_printf(const char *, ...);
 int	count_arg(const char *string);
 void	list_print(t_list	*list, va_list argptr);

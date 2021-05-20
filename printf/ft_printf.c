@@ -47,7 +47,10 @@ void	list_print(t_list	*list, va_list argptr)
 	if (list->specificator == 'p')
 		printf_pointer(list, argptr);
 	if (list->specificator == '%')
+	{
 		ft_putchar_fd('%', 1);
+		list->length++;
+	}
 }
 
 t_list	*ft_zero_list()
