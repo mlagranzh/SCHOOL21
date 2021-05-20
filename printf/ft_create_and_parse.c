@@ -19,7 +19,7 @@ int	parser_width(const char *string, va_list argptr)
 	char	*specificators;
 
 	specificators = "cspdiuxX";
-	while (!ft_char_in_string(specificators, *string) && *string != '.')
+	while (!ft_strchr(specificators, *string) && *string != '.')
 	{
 		string++;
 		if (*string == '*')
@@ -42,7 +42,7 @@ int	parser_precision(const char *string, va_list argptr)
 	char	*specificators;
 
 	specificators = "cspdiuxX";
-	while (!ft_char_in_string(specificators, *string) && *string != '.')
+	while (!ft_strchr(specificators, *string) && *string != '.')
 		string++;
 	if (*string == '.')
 	{
@@ -59,7 +59,7 @@ int	parser_precision(const char *string, va_list argptr)
 		}
 		return (0);
 	}
-	return (-1); //значит флаг отсутствует
+	return (-1);
 }
 
 char	parser_specificator(const char *string)
@@ -68,50 +68,32 @@ char	parser_specificator(const char *string)
 
 	specificators = "cspdiuxX%";
 	string++;
-	while (!ft_char_in_string(specificators, *string))
+	while (!ft_strchr(specificators, *string))
 		string++;
 	return (*string);
 }
 
-char *parser_parameters(char *string)
+int	parser_width_true(const char *string)
 {
 	char	*specificators;
-	char output[3];
+
 	specificators = "cspdiuxX";
-	while (!ft_char_in_string(specificators, *string) && *string != '.')
-	{
-	string++;
-	if (*string == '*')
-	{
-					output[0] = 'w';
-	}
-	if (ft_isdigit(*string) && *string != '0')
-	{
-					output[0] = 'w';
-		}
-}
-	while (!ft_char_in_string(specificators, *string))
-	{
-	if (*string == '.')
+	while (!ft_strchr(specificators, *string) && *string != '.')
 	{
 		string++;
 		if (*string == '*')
 		{
-					output[1] = '.';
-
+			return (1);
 		}
-		if (ft_isdigit(*string))
+		if (ft_isdigit(*string) && *string != '0')
 		{
-					output[1] = '.';
-
+			return (1);
 		}
 	}
-			string++;
-	}
-		output[2] = '\0';
-	return ("");
+	return (0);
 }
-t_list	*ft_create_list(const char *string, va_list argptr)
+
+t_list	*ft_create_print_list(const char *string, va_list argptr)
 {
 	t_list	*list;
 
@@ -121,6 +103,7 @@ t_list	*ft_create_list(const char *string, va_list argptr)
 	list->precision = parser_precision(string, argptr);
 	list->specificator = parser_specificator(string);
 	list->length = 0;
-	list->parameters = parser_parameters((char *)string);
+	list -> width_true = parser_width_true(string);
+	list_print(list, argptr);
 	return (list);
 }
