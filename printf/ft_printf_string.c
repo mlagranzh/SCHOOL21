@@ -8,6 +8,8 @@ void printf_string(t_list	*list, va_list argptr)
 
   count_space = 0;
   a = va_arg(argptr, char *);
+  if (a == NULL)
+    a = "(null)";
   if (list->flags == '-' || (list-> width < 0 && list -> width_true))
   {
     if (list-> width < 0 && list -> width_true)

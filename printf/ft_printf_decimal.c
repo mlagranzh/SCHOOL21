@@ -30,6 +30,8 @@ void printf_decimal(t_list *list, va_list argptr)
   }
   else if (list->flags == '0')
   {
+    if (list-> width < 0 && list -> width_true)
+      list-> width = -(list-> width);
     if (list->precision >= 0)
       count_zero = list->precision - ft_len_int_10(a);
     else

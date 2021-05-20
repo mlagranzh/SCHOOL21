@@ -19,19 +19,24 @@ int	parser_width(const char *string, va_list argptr)
 	char	*specificators;
 
 	specificators = "cspdiuxX";
+	string++;
+	if (*string == '-')
+		string++;
+	if (*string == '0')
+		string++;
 	while (!ft_strchr(specificators, *string) && *string != '.')
 	{
-		string++;
 		if (*string == '*')
 		{
 			width = va_arg(argptr, int);
 			return (width);
 		}
-		if (ft_isdigit(*string) && *string != '0')
+		if (ft_isdigit(*string) || *string == '-')
 		{
 			width = ft_atoi((char *)string);
 			return (width);
 		}
+		string++;
 	}
 	return (-1);
 }
@@ -78,17 +83,18 @@ int	parser_width_true(const char *string)
 	char	*specificators;
 
 	specificators = "cspdiuxX";
+	string++;
+	if (*string == '-')
+		string++;
+	else if (*string == '0')
+		string++;
 	while (!ft_strchr(specificators, *string) && *string != '.')
 	{
-		string++;
 		if (*string == '*')
-		{
 			return (1);
-		}
-		if (ft_isdigit(*string) && *string != '0')
-		{
+		if (ft_isdigit(*string) || *string == '-')
 			return (1);
-		}
+		string++;
 	}
 	return (0);
 }
@@ -103,7 +109,7 @@ t_list	*ft_create_print_list(const char *string, va_list argptr)
 	list->precision = parser_precision(string, argptr);
 	list->specificator = parser_specificator(string);
 	list->length = 0;
-	list -> width_true = parser_width_true(string);
+	list->width_true = parser_width_true(string);
 	list_print(list, argptr);
 	return (list);
 }
