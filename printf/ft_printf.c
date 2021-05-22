@@ -1,47 +1,25 @@
 #include "./Libft/libft.h"
 #include "ft_printf.h"
 
-void	list_print(t_list	*list, va_list argptr)
+t_list	*ft_list_print(t_list	*list, va_list argptr)
 {
 	if (list->specificator == 's')
-		printf_string(list, argptr);
+		list = ft_printf_string(list, argptr);
 	if (list->specificator == 'c')
-		printf_char(list, argptr);
+		list = ft_printf_char(list, argptr);
 	if (list->specificator == 'x')
-		printf_hexadecimal(list, argptr, 'x');
+		list = ft_printf_he(list, argptr, 'x');
 	if (list->specificator == 'X')
-		printf_hexadecimal(list, argptr, 'X');
+		list = ft_printf_he(list, argptr, 'X');
 	if (list->specificator == 'i' || list->specificator == 'd')
-		printf_decimal(list, argptr);
+		list = ft_printf_decimal(list, argptr);
 	if (list->specificator == 'u')
-		printf_unsigned(list, argptr);
+		list = ft_printf_unsigned(list, argptr);
 	if (list->specificator == 'p')
-		printf_pointer(list, argptr);
+		list = ft_printf_pointer(list, argptr);
 	if (list->specificator == '%')
-		ft_putchar_list('%', list);//printf_procent(list);
-}
-
-void printf_procent(t_list *list)
-{
-  int count_space;
-
-  count_space = 0;
-  if (list->flags == '-' || (list-> width < 0 && list -> width_true))
-  {
-	count_space = list->width - 1;
-    if (list-> width < 0 && list -> width_true)
-      list->width = -list->width;
-	ft_putchar_list('%', list);
-    while (count_space-- > 0)
-      ft_putchar_list(' ', list);
-  }
-  else
-  {
-    count_space = list->width - 1;
-    while (count_space-- > 0)
-      ft_putchar_list(' ', list);
-	ft_putchar_list('%', list);
-  }
+		list = ft_printf_procent(list);
+	return (list);
 }
 
 t_list	*ft_zero_list(void)
@@ -54,7 +32,6 @@ t_list	*ft_zero_list(void)
 	list->precision = (int) NULL;
 	list->specificator = (char) NULL;
 	list->length = 0;
-	list->width_true = 0;
 	return (list);
 }
 
@@ -62,6 +39,20 @@ void	ft_putchar_list(char c, t_list *list)
 {
 	write(1, &c, 1);
 	list->length++;
+}
+
+t_list	*ft_create_print_list(const char *string, va_list argptr, t_list *list)
+{
+	list->flags = ft_parser_flag(string);
+	list->width = ft_parser_width(string, argptr);
+	list->precision = ft_parser_precision(string, argptr);
+	list->specificator = ft_parser_specificator(string);
+	list->length = 0;
+	string++;
+	if (*string == ' ')
+		ft_putchar_list(' ', list);
+	list = ft_list_print(list, argptr);
+	return (list);
 }
 
 int	ft_printf(const char *string, ...)
@@ -79,15 +70,15 @@ int	ft_printf(const char *string, ...)
 		list = ft_zero_list();
 		if (*string == '%')
 		{
-			list = ft_create_print_list(string, argptr);
-			string++;
-			while (!ft_strchr(specificators, *string))
+			list = ft_create_print_list(string++, argptr, list);
+			while (!ft_strchr(specificators, *(string)))
 				string++;
 		}
 		else
 			ft_putchar_list(*string, list);
 		output += list->length;
 		string++;
+		free(list);
 	}
 	va_end(argptr);
 	return (output);

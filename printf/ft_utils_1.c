@@ -1,6 +1,6 @@
 #include "ft_printf.h"
 
-int	ft_len_unsigned_10(unsigned int number)
+int	ft_len_unsigned(unsigned long number, int base)
 {
 	int	count;
 
@@ -9,13 +9,13 @@ int	ft_len_unsigned_10(unsigned int number)
 		return (1);
 	while (number != 0)
 	{
-		number /= 10;
+		number /= base;
 		count++;
 	}
 	return (count);
 }
 
-int	ft_len_int_10(int n)
+int	ft_len_int(int n)
 {
 	unsigned int	number;
 	int				count;
@@ -30,21 +30,6 @@ int	ft_len_int_10(int n)
 	while (number != 0)
 	{
 		number /= 10;
-		count++;
-	}
-	return (count);
-}
-
-int	ft_len_unsigned_16(unsigned int number)
-{
-	int	count;
-
-	count = 0;
-	if (number == 0)
-		return (1);
-	while (number != 0)
-	{
-		number /= 16;
 		count++;
 	}
 	return (count);
@@ -69,4 +54,12 @@ void	ft_put_unsigned_list(unsigned int a, t_list *list)
 	ch = a % 10 + '0';
 	write(1, &ch, 1);
 	list->length++;
+}
+
+int	ft_its_pointer(char ch)
+{
+	if (ch == 'p')
+		return (2);
+	else
+		return (0);
 }

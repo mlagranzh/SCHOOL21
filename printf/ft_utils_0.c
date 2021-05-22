@@ -1,6 +1,6 @@
 #include "ft_printf.h"
 
-int	max(int a, int b)
+int	ft_max(int a, int b)
 {
 	if (a > b)
 		return (a);
@@ -8,7 +8,7 @@ int	max(int a, int b)
 		return (b);
 }
 
-int	min(int a, int b)
+int	ft_min(int a, int b)
 {
 	if (a < b)
 		return (a);
@@ -16,7 +16,7 @@ int	min(int a, int b)
 		return (b);
 }
 
-int	printable(t_list *list, unsigned int a)
+int	ft_printable(t_list *list, int a)
 {
 	if (list->precision == 0 && a == 0)
 		return (1);
