@@ -1,52 +1,45 @@
 #include "pipex.h"
-#include<stdio.h>
-#include<stdlib.h>
-#include <time.h>
 
-void delay(double dly){
-    /* save start time */
-    const time_t start = time(NULL);
-
-    time_t current;
-    do{
-        /* get current time */
-        time(&current);
-
-        /* break loop when the requested number of seconds have elapsed */
-    }while(difftime(current, start) < dly);
-}
-
-char	*parse_filename(char *command, char **envp)
+char	**utils_parse_filename(char **envp)
 {
-	int		i;
 	char	**parse_1;
 	char	**parse_2;
-	char	*parse_3;
-	char	*parse_4;
 
-	i = 1;
-	while (command[(i++) - 1] != '\0')
-		if (command[i] == '/' && command[i + 1] != '/')
-			return (command);
 	while ((*envp)[0] != 'P' || (*envp)[1] != 'A' || \
 					(*envp)[2] != 'T' || (*envp)[3] != 'H' || (*envp)[4] != '=')
 		envp++;
 	parse_1 = ft_split(*envp, '=');
 	parse_2 = ft_split(parse_1[1], ':');
 	parse_1 = ft_malloc_free(parse_1);
+	return (parse_2);
+}
+
+char	*parse_filename(char *command, char **envp)
+{
+	int		i;
+	char	**parse_1;
+	char	*parse_2;
+	char	*parse_3;
+
+	if (command[0] == '/' || (command[0] == '.' && command[1] == '/'))
+		return (command);
+	parse_1 = utils_parse_filename(envp);
 	i = 0;
 	while (1)
 	{
-		parse_3 = ft_strjoin(parse_2[i], "/");
-		parse_4 = ft_strjoin(parse_3, command);
-		free(parse_3);
-		i++;
-		if (access(parse_4, X_OK) != -1)
+		parse_2 = ft_strjoin(parse_1[(i++)], "/");
+		parse_3 = ft_strjoin(parse_2, command);
+		if (access(parse_3, X_OK) != -1)
 		{
-			parse_2 = ft_malloc_free(parse_2);
-			return (parse_4);
+			parse_1 = ft_malloc_free(parse_1);
+			return (parse_3);
 		}
-		free(parse_4);
+		free(parse_3);
+		if (parse_1[i] == NULL)
+		{
+			parse_1 = ft_malloc_free(parse_1);
+			return (NULL);
+		}
 	}
 }
 
@@ -85,7 +78,7 @@ void	parent_process(char	**argv, char	**envp, int *fd, int pid)
 	char	**command;
 	char	**tmp;
 
-	file2 = open(argv[4], O_WRONLY);
+	file2 = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0666);
 	waitpid(pid, NULL, 0);
 	if (file2 == -1)
 	{
@@ -100,7 +93,6 @@ void	parent_process(char	**argv, char	**envp, int *fd, int pid)
 	filename = parse_filename(tmp[0], envp);
 	tmp = ft_malloc_free(tmp);
 	command = ft_split(argv[3], ' ');
-	delay(10);
 	if (execve(filename, command, envp) == -1)
 	{
 		perror("ERROR PARENT");
