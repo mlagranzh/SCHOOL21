@@ -1,6 +1,6 @@
 #include "libft.h"
 
-static char	**ft_malloc_free(char **p)
+char	**ft_malloc_free(char **p)
 {
 	unsigned int	i;
 
@@ -40,7 +40,7 @@ static unsigned int	ft_count_array(char const *s, char c)
 	return (count_array);
 }
 
-char	*ft_get_next_array (char *p, char const *s, char c)
+char	*ft_get_next_array(char *p, char const *s, char c)
 {
 	unsigned int		end;
 
