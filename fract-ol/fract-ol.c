@@ -14,14 +14,20 @@ int	close(int keycode)
         exit(0);
 }
 
-// t_complex init_complex(double re, double im)
-// {
-//     t_complex complex;
+typedef struct s_complex 
+{
+    double re;
+    double im;
+} t_complex;
+
+t_complex init_complex(double re, double im)
+{
+    t_complex complex;
     
-//     complex.re = re;
-//     complex.im = im;
-//     return (complex);
-// }
+    complex.re = re;
+    complex.im = im;
+    return (complex);
+}
 
 void draw(void *mlx, void *win, int x0, int y0)
 {
@@ -68,27 +74,34 @@ int	create_trgb(int t, int r, int g, int b)
 
 void mondelbrod(void *mlx, void *win)
 {
-		double max_im = -2.0 + (2.0 + 2.0) * 1000.0 / 1000.0;
-		double factor_re = (2.0 + 2.0) / (1000.0 - 1.0);
-		double factor_im = (max_im + 2.0) / (1000.0 - 1.0);
+    int HEIGHT = 1000;
+    int WIDTH = 1000;
+    t_complex min;
+    t_complex max;
+    t_complex factor;
+    t_complex c;
+    t_complex z;
+    min = init_complex(-2.0, -2.0);
+    max.re = 2.0;
+    max.im = min.im + (max.re - min.re) * HEIGHT/WIDTH;
+    factor = init_complex((max.re - min.re) / (WIDTH - 1) , (max.im - min.im) / (HEIGHT - 1));
 
-		
-	for(int y = 0; y < 1000; ++y)
+	for(int y = 0; y < HEIGHT; y++)
 	{
-		double c_im = max_im - y * factor_im;
-	for(int x = 0; x < 1000; ++x)
-	{
-		double c_re = -2.0 + x * factor_re;
-		double im = c_im;
-		double re = c_re;
-		int i = 0;
-		while (i < 50 && sqrt(im*im + re*re) < 2)
+		c.im = max.im - y * factor.im;
+		for(int x = 0; x < WIDTH; x++)
 		{
-			re = re*re - im*im + c_re;
-			im = 2*re*im + c_im;
-			++i;
-		}
-		if (sqrt(im*im + re*re) >= 2)
+			c.re = min.re + x * factor.re;
+			z = init_complex(c.re, c.im);
+			int i = 0;
+			while (i < 50 && sqrt(z.im*z.im + z.re*z.re) < 2.0)
+			{
+				z = init_complex(
+					z.re * z.re - z.im * z.im + c.re,
+					2.0 * z.re * z.im + c.im);
+				i++;
+			}
+		if (sqrt(z.im*z.im + z.re*z.re) >= 2.0)
 		{
 			double t = (double)i / 50.0;
 			int red = (int)(9 * (1 - t) * pow(t, 3) * 255);
@@ -100,34 +113,10 @@ void mondelbrod(void *mlx, void *win)
 	}
 	}
 }
+
 void julia(void *mlx, void *win)
 {
 
-	double max_im = -2.0 + (2.0 + 2.0) * 300.0 / 300.0;
-	double factor_re = (2.0 + 2.0) / (300.0 - 1.0);
-	double factor_im = (max_im + 2.0) / (300.0 - 1.0);
-	
-for(int y = 0; y < 300; ++y)
-{
-	double c_im = max_im - y * factor_im;
-for(int x = 0; x < 300; ++x)
-{
-	double c_re = -2.0 + x * factor_re;
-	double im = c_im;
-	double re = c_re;
-	int i = 0;
-	while (i < 50 && sqrt(im*im + re*re) < 2)
-	{
-		re = re*re - im*im + c_re;
-		im = 2*re*im + c_im;
-		++i;
-	}
-	if (sqrt(im*im + re*re) >= 2)
-	{
-		draw(mlx, win, x, y);
-	}
-}
-}
 }
 
 int main()
