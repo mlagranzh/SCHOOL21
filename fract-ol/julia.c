@@ -51,6 +51,7 @@ void	julia(t_vars *vars)
 	t_image	img;
 
 	mlx_clear_window(vars -> mlx, vars -> win);
+	vars -> fract_ol = "julia";
 	vars -> min.re += vars -> zoom;
 	vars -> min.im += vars -> zoom;
 	vars -> max.re -= vars -> zoom;
@@ -61,7 +62,8 @@ void	julia(t_vars *vars)
 	img.buffer = mlx_get_data_addr(img.image, &(img.pixel_bits), \
 									&(img.line_bytes), &(img.endian));
 	draw_julia(vars, &img);
-	mlx_put_image_to_window(vars -> mlx, vars -> win, img.image, 0, 0);
+	mlx_put_image_to_window(vars -> mlx, vars -> win, img.image, \
+							vars -> x_bias, vars -> y_bias);
 	mlx_destroy_image(vars -> mlx, img.image);
 }
 

@@ -5,6 +5,7 @@ void	mandelbar(t_vars *vars)
 	t_image	img;
 
 	mlx_clear_window(vars -> mlx, vars -> win);
+	vars -> fract_ol = "mandelbar";
 	vars -> min.re += vars -> zoom;
 	vars -> min.im += vars -> zoom;
 	vars -> max.re -= vars -> zoom;

@@ -88,20 +88,11 @@ int	main(int argc, char **argv)
 	}
 	init_vars(&vars);
 	if (!ft_strncmp(argv[1], "mandelbrot", 10))
-	{
-		vars.fract_ol = "mandelbrot";
 		mandelbrot(&vars);
-	}
 	else if (!ft_strncmp(argv[1], "julia", 5))
-	{
-		vars.fract_ol = "julia";
 		mlx_hook(vars.win, 6, 0, julia_motion, &vars);
-	}
 	else if (!ft_strncmp(argv[1], "mandelbar", 9))
-	{
-		vars.fract_ol = "mandelbar";
 		mandelbar(&vars);
-	}
 	else
 	{
 		printf("Укажи название фрактала: mandelbrot/julia/mandelbar\n");
