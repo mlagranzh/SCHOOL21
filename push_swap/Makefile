@@ -1,15 +1,17 @@
 NAME	=	push_swap
-GCC	=	gcc -Wall -Wextra -Werror
+GCC		=	gcc -Wall -Wextra -Werror
 LIBA	=	libft/
-SRCS	=	main.c	
-OBJ	=	$(SRCS:.c=.o)
+SRCS	=	main.c	operations.c simple_sort.c
+OBJ		=	$(SRCS:.c=.o)
 INCLUDE	=	.
+OBJ_DIR	=	/.o
 
 all: libft $(NAME)
-$(NAME): $(OBJ) $(INCLUDE)
+#%(OBJ_DIR:.o): %.c $(INCLUDE)
+#		$(GCC) -c $(SRCS) -I $(INCLUDE)
+$(NAME): $(OBJ) 
 	@echo "\033[0;35mСоздаю исполняемый файл...\033[0;32m"
-	$(GCC) -I $(INCLUDE) -o $(NAME) $(OBJ) -L $(LIBA) -lft
-
+	$(GCC) -o $(NAME) $(OBJ) -L $(LIBA) -lft
 libft:
 	@echo "\033[0;35mКомпилю libft... \033[0;32m"
 	@make -C $(LIBA)

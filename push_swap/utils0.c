@@ -148,6 +148,85 @@ t_stack	*init_list(t_stack *lst, int *array, int size)
 	return (p);
 }
 
+void	swap(t_stack **lst, char *which_stack)
+{
+	t_stack	*tmp;
+
+	tmp = *lst;
+	*lst = (*lst)-> next;
+	tmp -> next = (*lst)-> next;
+	tmp -> prev = *lst;
+	(*lst)-> next = tmp;
+	(*lst)-> prev = NULL;
+	if (which_stack == "A")
+		write(1, "sa\n", 3);
+	if (which_stack == "B")
+		write(1, "sb\n", 3);
+}
+
+void	rotate(t_stack **lst, char *which_stack)
+{
+	t_stack	*tmp1;
+	t_stack	*tmp2;
+
+	tmp1 = *lst;
+	tmp2 = (*lst)-> next;
+	while ((*lst)-> next != NULL)
+		(*lst) = (*lst)-> next;
+	tmp1 -> next = NULL;
+	(*lst)-> next = tmp1;
+	(*lst) = tmp2;
+	if (which_stack == "A")
+		write(1, "ra\n", 3);
+	if (which_stack == "B")
+		write(1, "rb\n", 3);
+}
+
+void	reverse_rotate(t_stack **lst, char *which_stack)
+{
+	t_stack	*tmp1;
+	t_stack	*tmp2;
+
+	tmp1 = (*lst);
+	while ((*lst)-> next != NULL)
+		(*lst) = (*lst)-> next;
+	(*lst)-> next = tmp1;
+	tmp2 = (*lst);
+	while ((*lst)-> next != tmp2)
+		(*lst) = (*lst)-> next;
+	(*lst)-> next = NULL;
+	(*lst) = tmp2;
+	if (which_stack == "A")
+		write(1, "rra\n", 4);
+	if (which_stack == "B")
+		write(1, "rrb\n", 4);
+}
+
+void	push(t_stack **stack_A, t_stack **stack_B, char *which_stack) //pop + add list
+{
+	t_stack	*tmp;
+
+	if (which_stack == "A")
+	{
+		tmp = *stack_B;
+		(*stack_B) = (*stack_B)-> next;
+		tmp -> next = (*stack_A);
+		(*stack_A) = tmp;
+		(*stack_A)-> top = (*stack_A);
+		write(1, "pa\n", 3);
+	}
+	if (which_stack == "B")
+	{
+		tmp = *stack_A;
+		(*stack_A) = (*stack_A)-> next;
+		tmp -> next = (*stack_B);
+		(*stack_B) = tmp;
+		(*stack_B)-> top = (*stack_B);
+		write(1, "pb\n", 3);
+	}
+}
+
+
 int check_sort(int *array, int size)
 {
     int i;
@@ -164,9 +243,9 @@ int check_sort(int *array, int size)
 
 int check_sort_stack(t_stack *stack_A)
 {
-  while (stack_A -> next -> next != NULL)
+  while (stack_A -> next != NULL)
   {
-    if (stack_A -> order != (stack_A -> next -> order - 1))
+    if (stack_A -> value > stack_A -> next -> value)
       return (0);
     stack_A = stack_A -> next;
   }
@@ -200,69 +279,20 @@ int	size_stack(t_stack *stack)
 	return (i);
 }
 
-//посмотреть эту функцию внимательно багована мне кажется
-int	check_sort_stack_2(t_stack *stack_A, int i, t_main	*main_struct)
+int	check_sort_stack_2(t_stack *stack_A, int i)
 {
 	int	number;
 	
 	number = size_stack(stack_A) / i;
-	if (i != size_stack(stack_A))
-		while (number--)
-			stack_A = stack_A -> next;
+	while (number--)
+		stack_A = stack_A -> next;
 	while (stack_A -> next -> next != NULL)
 	{
-		if (stack_A -> order  != (stack_A -> next -> order -1))
+		if (stack_A -> order > stack_A -> next -> order)
 			return (0);
 		stack_A = stack_A -> next;
 	}
 	return (1);
-}
-void	reverse_rotate_r(t_stack **stack_A, t_stack **stack_B)
-{
-	t_stack	*tmp1;
-	t_stack	*tmp2;
-
-	tmp1 = (*stack_A);
-	while ((*stack_A)-> next != NULL)
-		(*stack_A) = (*stack_A)-> next;
-	(*stack_A)-> next = tmp1;
-	tmp2 = (*stack_A);
-	while ((*stack_A)-> next != tmp2)
-		(*stack_A) = (*stack_A)-> next;
-	(*stack_A)-> next = NULL;
-	(*stack_A) = tmp2;
-	tmp1 = (*stack_B);
-	while ((*stack_B)-> next != NULL)
-		(*stack_B) = (*stack_B)-> next;
-	(*stack_B)-> next = tmp1;
-	tmp2 = (*stack_B);
-	while ((*stack_B)-> next != tmp2)
-		(*stack_B) = (*stack_B)-> next;
-	(*stack_B)-> next = NULL;
-	(*stack_B) = tmp2;
-	write(1, "rrr\n", 4);
-}
-
-void	rotate_r(t_stack **stack_A, t_stack **stack_B)
-{
-	t_stack	*tmp1;
-	t_stack	*tmp2;
-
-	tmp1 = *stack_A;
-	tmp2 = (*stack_A)-> next;
-	while ((*stack_A)-> next != NULL)
-		(*stack_A) = (*stack_A)-> next;
-	tmp1 -> next = NULL;
-	(*stack_A)-> next = tmp1;
-	(*stack_A) = tmp2;
-	tmp1 = *stack_B;
-	tmp2 = (*stack_B)-> next;
-	while ((*stack_B)-> next != NULL)
-		(*stack_B) = (*stack_B)-> next;
-	tmp1 -> next = NULL;
-	(*stack_B)-> next = tmp1;
-	(*stack_B) = tmp2;
-	write(1, "rr\n", 3);
 }
 
  void step_0(t_stack **stack_A, t_stack **stack_B, t_main **main_struct)
@@ -274,14 +304,7 @@ void	rotate_r(t_stack **stack_A, t_stack **stack_B)
     if ((*stack_A) -> order <= (*main_struct)->mid)
       push(&(*stack_A), &(*stack_B), "B");
     else
-	{
-			if (size_stack((*stack_B)) >= 2 && ((*stack_B)-> order != (*main_struct) -> next))
-			{
-					rotate_r(&(*stack_A), &(*stack_B));
-					continue;
-			}
-			rotate(&(*stack_A), "A");
-	}
+      rotate(&(*stack_A), "A");
   }
 }
 
@@ -290,8 +313,6 @@ int	count_not_sort(t_stack *stack)
 	int	i;
 
 	i = 0;
-	while (stack -> flag != -1)
-		stack = stack -> next;
 	while (stack -> next != NULL)
 	{
 		if (stack -> order != (stack -> next -> order - 1))
@@ -307,24 +328,6 @@ int	count_not_sort(t_stack *stack)
 	}
 	return (i);
 }
-//По условию в стек могут быть поданы только числа входящие в диапазон int, проверяйте на переполнение.
-//Если в чекер подадут пустую строку он должен вывести \n.
-
-int next_element(t_stack *stack_A)
-{
-  int i = 1;
-  while (stack_A -> next != NULL)
-  {
-    if (stack_A -> order == (stack_A -> next -> order - 1))
-      i++;
-    else 
-      i = 1;
-    stack_A = stack_A -> next;
-  }
-  return (i);
-}
-
-
 
 void	step_2(t_stack **stack_A, t_stack **stack_B, t_main **main_struct)
 {
@@ -336,17 +339,8 @@ void	step_2(t_stack **stack_A, t_stack **stack_B, t_main **main_struct)
 	flag = (*stack_A)-> flag;
 	while ((*stack_A)-> flag == flag)
 	{
-		// if (((*main_struct) -> max / (*main_struct)-> i + 1) == size_stack((*stack_B)))
-		// 	break;
 		if ((*stack_A)-> order > (*main_struct)-> mid)
-		{
-			// if (size_stack((*stack_B)) >= 2 && ((*stack_B)-> order != (*main_struct) -> next))
-			// {
-			// 		rotate_r(&(*stack_A), &(*stack_B));
-			// 		continue;
-			// }
 			rotate(&(*stack_A), "A");
-		}
 		else
 			push(&(*stack_A), &(*stack_B), "B");
 	}
@@ -382,8 +376,21 @@ void	step_1(t_stack **stack_A, t_stack **stack_B, t_main **main_struct)
 		(*main_struct)->flag++;
 	}
 }
-// 5 3 2 1 4 6
-// 6 5 2 3 1 4
+
+int next_element(t_stack *stack_A)
+{
+  int i = 1;
+  while (stack_A -> next != NULL)
+  {
+    if (stack_A -> order == (stack_A -> next -> order - 1))
+      i++;
+    else 
+      i = 1;
+    stack_A = stack_A -> next;
+  }
+  return (i);
+}
+
 t_stack	*middle_sort(t_stack *stack_A)
 {
 	t_stack	*stack_B;
@@ -391,70 +398,34 @@ t_stack	*middle_sort(t_stack *stack_A)
 
 	main_struct = malloc(sizeof(t_main));
 	stack_B = NULL;
-	main_struct->next = 1;
+	main_struct->next = next_element(stack_A);
 	main_struct->flag = 1;
 
-    main_struct-> i = 2;
+    int i = 2;
     int k;
     int p = 0;
-	if (stack_A->order == stack_A->next->order + 1)
-		swap(&stack_A, "A");
 	while (!check_sort_stack(stack_A))
 	{
-		write(1, "A", 1);
 		main_struct->max = size_stack(stack_A);
-		main_struct-> mid = (main_struct-> max - main_struct-> next) / 2 + main_struct-> next;
+		main_struct->mid = (main_struct->max - main_struct->next) / 2 + main_struct->next;
 		step_0(&stack_A, &stack_B, &main_struct);
 		if (p != 0)
 		{
 			k = count_not_sort(stack_A);
 			while (k--)
-			{
-				// if (k == size_stack(stack_A))
-				// {
-				// 	rotate(&(*stack_A), "A");
-				// 	break;
-				// }
-				if (stack_B -> order != main_struct->next)
-				{
-					reverse_rotate_r(&stack_A, &stack_B);
-					continue ;
-				}
 				reverse_rotate(&stack_A, "A");
-			}
 		}
 		step_1(&stack_A, &stack_B, &main_struct);
-		if (check_sort_stack(stack_A))
-			break;
-		while (!check_sort_stack_2(stack_A, main_struct-> i, main_struct))
+		while (!check_sort_stack_2(stack_A, i))
 		{
 			step_2(&stack_A, &stack_B, &main_struct);
-					if (p != 0)
-		{
-			k = count_not_sort(stack_A);
-			while (k--)
-			{
-				// if (k == size_stack(stack_A))
-				// {
-				// 	rotate(&(*stack_A), "A");
-				// 	break;
-				// }
-				if (stack_B -> order != main_struct->next)
-				{
-					reverse_rotate_r(&stack_A, &stack_B);
-					continue ;
-				}
-				reverse_rotate(&stack_A, "A");
-			}
-		}
-
 			step_1(&stack_A, &stack_B, &main_struct);
 		}
-		main_struct-> i += 2;
+		i += 2;
 		p++;
 	}
 	free(main_struct);
-    //  listprint(stack_A);
+    // listprint(stack_A);
     return (stack_A);
 }
 
@@ -474,6 +445,57 @@ int max_stack(t_stack *stack_A)
         stack_A = stack_A -> next;
     }
     return (k);
+}
+
+t_stack	*simple_sort(t_stack *stack_A)
+{
+	int	max;
+
+	if (size_stack(stack_A) == 1)
+		return (stack_A);
+	else if (size_stack(stack_A) == 2)
+	{
+		if (stack_A -> value > stack_A -> next -> value)
+			swap(&stack_A, "A");
+		return (stack_A);
+	}
+	max = max_stack(stack_A);
+	if (stack_A -> value == max)
+		rotate(&stack_A, "A");
+	if (stack_A -> next -> value == max)
+		reverse_rotate(&stack_A, "A");
+	if (stack_A -> value > stack_A -> next -> value)
+		swap(&stack_A, "A");
+	return (stack_A);
+}
+
+t_stack	*simple_sort_2(t_stack *stack_A)
+{
+	t_stack	*stack_B;
+
+	if (size_stack(stack_A) == 5)
+	{
+		while ((stack_A -> order != 1) && (stack_A -> order != 2))
+			rotate(&stack_A, "A");
+		push(&stack_A, &stack_B, "B");
+		while ((stack_A -> order != 1) && (stack_A -> order != 2))
+			rotate(&stack_A, "A");
+		push(&stack_A, &stack_B, "B");
+		stack_A = simple_sort(stack_A);
+		if (stack_B -> value < stack_B -> next -> value)
+			swap(&stack_B, "B");
+		push(&stack_A, &stack_B, "A");
+		push(&stack_A, &stack_B, "A");
+	}
+	else
+	{
+		while (stack_A->order != 1)
+			rotate(&stack_A, "A");
+		push(&stack_A, &stack_B, "B");
+		stack_A = simple_sort(stack_A);
+		push(&stack_A, &stack_B, "A");
+	}
+	return (stack_A);
 }
 
 void	all_free(t_stack *stack_A, int *array)
@@ -507,6 +529,8 @@ int	main(int argc, char **argv)
 		stack_A = simple_sort(stack_A);
 	else if (size <= 5)
 		stack_A = simple_sort_2(stack_A);
+	else if (size <= 100)
+		stack_A = middle_sort(stack_A);
 	else
 		stack_A = middle_sort(stack_A);
 	all_free(stack_A, array);
