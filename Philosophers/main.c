@@ -52,7 +52,6 @@ void	philo(t_args *args)
 	i = 0;
 	while (i < args ->nb_philo)
 	{
-		args -> mutex[i] = args -> my_mutex;
 		args -> available_mutex[i] = 1;
 		philo[i].last_eat = 0;
 		philo[i].time = 0;

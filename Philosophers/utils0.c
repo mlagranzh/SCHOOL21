@@ -75,7 +75,7 @@ long int	my_atoi(char *str)
 int	my_isdigit(char *string)
 {
 	if (*string == '-' || *string == '+')
-		string++;
+		return (0);
 	while (*string != '\0')
 	{
 		if (!(*string >= '0' && *string <= '9'))

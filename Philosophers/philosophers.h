@@ -23,7 +23,6 @@
 typedef struct argc
 {
 	pthread_mutex_t	*mutex;
-	pthread_mutex_t	my_mutex;
 	pthread_mutex_t	mutex_write;
 	pthread_t		*threads;
 	int				nb_philo;
